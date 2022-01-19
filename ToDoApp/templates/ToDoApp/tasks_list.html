@@ -1,0 +1,102 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>To Do App</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    
+</head>
+
+
+<body>
+    <section class="vh-100" style="background-color: #eee;">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-9 col-xl-7">
+              <div class="card rounded-3">
+                <div class="card-body p-4">
+      
+                  <h4 class="text-center my-3 pb-3">To Do App</h4>
+                  <h5 class="text-center my-3 pb-3">Welcome back, {{request.user}}!</h5>
+                  <h6 class="text-center my-3 pb-3">{% if request.user.is_authenticated %}
+                    <a href="{% url 'logout' %}">Logout</a> {% else %}
+                    <a href="{% url 'login' %}">Login</a> {% endif %}</h6>
+
+                  
+                  <form action="{% url 'create' %}" method="post" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="content">
+                        <div class="input-group-append text-info">
+                            <span class="input-group-text bg-white py-0">
+                                <button type="submit" class="btn btn-sm text-info">
+                                    <i class="fa fa-plus-circle fa-lg"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+      
+                  <table class="table mb-4">
+                    <thead>
+                      <tr>
+                        
+                        <th scope="col">Tasks</th>
+                        
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for task in tasks %}
+                        {%if task.user_id == request.user.id %}
+                        <tr>
+                            <td>{{task.content}}</td>
+                            
+                                <td>
+                                    <form action = "{% url 'delete' task.id %}" method="post"></from>
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            
+
+                        </tr>
+                        {%else%}
+                        
+                        {%endif%}
+                        {% endfor %}
+
+                    </tbody> 
+                  </table>
+      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"></script>
+
+</body>
+
+</html>
+
